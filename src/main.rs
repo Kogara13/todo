@@ -1,6 +1,7 @@
 use std::env;
 use std::fs::{self, File};
 use std::path::Path;
+use std::fs::OpenOptions;
 
 
 
@@ -44,7 +45,11 @@ fn main() {
 
 //Take command line arguments and append them to file
 fn add(&file_path: String, &args: &[String]) {
-    
+    let file = OpenOptions::new()
+        .read(true)
+        .write(true)
+        .create(true) //May not need this
+        .open(&file_path);
 }
 
 
