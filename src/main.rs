@@ -43,6 +43,28 @@ impl Todo {
         Todo { path, list }
     }
 
+
+    //Take what is currenlty in the file and list it, adding numbers depending on the line numbers
+    fn list(&self) {
+        //Do the same thing as the constructor function to get contents of file
+        let mut current_list: Vec<String> = match fs::read_to_string(&self.path){
+            Ok(contents) => contents
+                .split("\n")
+                .map(|line| line.to_string())
+                .collect(),
+            Err(error) => {
+                eprintln!("failed to read todo-list file: {}", error);
+                Vec::new()
+            }
+        };
+
+        //Iterate through vector, printing index + 1 before each line 
+        for (index, item) in current_list.iter_mut().enumerate() {
+            println!("{}: {}", (index + 1), item);
+        }
+        
+    }
+
     //Append a new line to the file directly. Then the program will rust list to regrab everything
     //from the file, including th new stuff
     fn add(&self, args: &[String]) -> Result<(), Box<dyn Error>> {
@@ -66,14 +88,8 @@ impl Todo {
         //Convert String to bytes and append to file 
         writeln!(file, "{}", list_item)?;
 
-        Ok(())
-        
-
-
-
-        
+        Ok(()) 
     }
-
 
 }
 
